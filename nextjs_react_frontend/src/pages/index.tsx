@@ -1,4 +1,12 @@
+// pages/index.tsx
+import Layout from "@/components/layout";
+
 export default function Home() 
 {
-    return <h1>Hello, Next.js!</h1>
+    return (
+      <Layout title="Home Page">
+        <h1>Welcome to the Home Page</h1>
+        {/* Other content */}
+      </Layout>
+    );
 }
