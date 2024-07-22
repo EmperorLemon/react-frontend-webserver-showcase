@@ -1,0 +1,35 @@
+.header {
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    list-style-type: none; /* Remove default list styling */
+}
+
+.navItem {
+    margin: 0 1rem;
+    padding: 0; /* Remove any default padding */
+}
+
+.navLink {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    display: inline-block; /* Ensure the link takes the full space of its parent */
+}
+
+.navLink:hover {
+    background-color: #e9ecef;
+}
