@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import LoginForm from "@/components/LoginForm";
 
 function onLoginSuccess(token : string) {
-    console.log("Success!");
+    console.log("Token: " + token);
 }
 
 const Login: NextPage = () => {

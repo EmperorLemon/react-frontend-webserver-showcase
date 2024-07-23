@@ -1,26 +1,46 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
 import axios from "axios";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import styles from "@/styles/LoginForm.module.css";
 
+const formSchema = z.object({
+    username: z.string().min(2, {
+        message: "Username must be at least 2 characters.",
+    }),
+    password: z.string().min(4, {
+        message: "Password must be at least 4 characters.",
+    }),
+});
+
 type LoginFormProps = { onLoginSuccess: (token: string) => void };
 
-function LoginForm({ onLoginSuccess } : LoginFormProps) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+function LoginForm({ onLoginSuccess }: LoginFormProps) {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: "",
+            password: "",
+        },
+    });
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         setError("");
 
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/login/", { username, password });
+            const response = await axios.post("http://localhost:8000/api/auth/login/", values);
             const { accessToken, refreshToken } = response.data;
 
             localStorage.setItem("accessToken", accessToken);
@@ -33,25 +53,44 @@ function LoginForm({ onLoginSuccess } : LoginFormProps) {
         } finally {
             setIsLoading(false);
         }
-    };
+    }
 
     return (
         <div className={styles.container}>
-            <form onSubmit={handleSubmit} className={styles.form}>
-                {error && <p className={styles.error}>{error}</p>}
-                
-                <Input type="text" value={username} onChange={(e) => setUsername(e.target.value)} 
-                    placeholder="Username" required className={styles.input} disabled={isLoading}/>
-
-                <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} 
-                    placeholder="Password" required className={styles.input} disabled={isLoading}/>
-
-                <Button type="submit" className={styles.button} disabled={isLoading}>
-                    {isLoading ? "Logging in..." : "Login"}
-                </Button>
-            </form>
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+                    {error && <p className={styles.error}>{error}</p>}
+                    <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Username</FormLabel><br/>
+                                <FormControl>
+                                    <Input {...field} type="text" placeholder="Username" required className={styles.input} disabled={isLoading}/>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel><br/>
+                                <FormControl>
+                                    <Input {...field} type="password" placeholder="Password" required className={styles.input} disabled={isLoading}/>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit" className={styles.button} disabled={isLoading}>
+                        {isLoading ? "Logging in..." : "Login"}
+                    </Button>
+                </form>
+            </Form>
         </div>
     );
-};
+}
 
 export default LoginForm;
