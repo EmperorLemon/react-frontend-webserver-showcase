@@ -1,10 +1,11 @@
-// pages/index.tsx
-import Layout from "@/components/layout";
+import { useState, useEffect } from "react";
 
-export default function Home() {
+const Home: React.FC = () => {
     return (
-        <Layout title="Home Page">
-            <h1>Welcome to the Home Page</h1>
-        </Layout>
+        <div>
+            <h1>Welcome Home</h1>
+        </div>
     );
-}
+};
+
+export default Home;
