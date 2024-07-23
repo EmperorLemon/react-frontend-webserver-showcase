@@ -1,13 +1,14 @@
 import NavigationHeader from  "@/components/NavigationHeader";
-import Head from "next/head";
 import styles from "@/styles/Layout.module.css";
+
+import Head from "next/head";
 
 interface LayoutProps {
     children: React.ReactNode;
     title?: string;
 };
 
-const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+function Layout({ children, title }: LayoutProps) {
     return (
         <div>
             <Head>
@@ -17,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             </Head>
             <header className={styles.header}><NavigationHeader/></header>
             <main>{children}</main>
-            <footer className={styles.footer}>© 2024 Generic Webpage</footer>
+            <footer className={styles.footer}>© 2024 Caleb Goss</footer>
         </div>
     );
 };

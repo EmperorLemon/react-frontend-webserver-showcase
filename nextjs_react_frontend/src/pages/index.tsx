@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { NextPage } from "next";
 
-const Home: React.FC = () => {
+const Home: NextPage = () => {
     return (
         <div>
             <h1>Welcome Home</h1>
