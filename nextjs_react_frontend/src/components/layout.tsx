@@ -13,7 +13,7 @@ function Layout({ children, title }: LayoutProps) {
         <div>
             <Head>
                 <title>{title || "Default Title"}</title>
-                <meta name="viewport" content="width=device-width, intial-scale=1"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <meta name="keywords" content="nextjs, react"/>
             </Head>
             <header className={styles.header}><NavigationHeader/></header>
