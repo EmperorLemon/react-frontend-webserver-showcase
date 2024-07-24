@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,12 +13,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import styles from "@/styles/LoginForm.module.css";
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-    }),
-    password: z.string().min(4, {
-        message: "Password must be at least 4 characters.",
-    }),
+    username: z.string().min(4, { message: "Username must be at least 4 characters." }),
+    password: z.string().min(4, { message: "Password must be at least 8 characters." }),
 });
 
 type LoginFormProps = { onLoginSuccess: (token: string) => void };
@@ -26,6 +22,16 @@ type LoginFormProps = { onLoginSuccess: (token: string) => void };
 function LoginForm({ onLoginSuccess }: LoginFormProps) {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        // Disable scrolling
+        document.body.classList.add(styles.noScroll);
+
+        // Re-enable scrolling when component unmounts
+        return () => {
+            document.body.classList.remove(styles.noScroll);
+        };
+    }, []);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -49,7 +55,26 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
             onLoginSuccess(accessToken);
         } catch (error: any) {
             console.error("Login error: ", error.response?.data || error.message);
-            setError(error.response?.data?.detail || "Login failed. Please check your credentials.");
+            
+            if (error.response) {
+                switch (error.response.status) {
+                    case 400:
+                        setError("Invalid username or password.");
+                        break;
+                    case 401:
+                        setError("Invalid username or password.");
+                        break;
+                    case 429:
+                        setError("Too many login attempts. Please try again later.");
+                        break;
+                    default:
+                        setError("An unexpected error occurred. Please try again later.");
+                }
+            } else if (error.request) {
+                setError("No response received from the server. Please check your internet connection.");
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -60,6 +85,7 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
                     {error && <p className={styles.error}>{error}</p>}
+
                     <FormField
                         control={form.control}
                         name="username"
@@ -67,11 +93,13 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
                             <FormItem>
                                 <FormLabel>Username</FormLabel><br/>
                                 <FormControl>
-                                    <Input {...field} type="text" placeholder="Username" required className={styles.input} disabled={isLoading}/>
+                                    <Input {...field} type="text" placeholder="Username" required className={`${styles.input} ${form.formState.errors.username ? styles.inputError : ''}`} disabled={isLoading}/>
                                 </FormControl>
+                                <FormMessage/>
                             </FormItem>
                         )}
                     />
+
                     <FormField
                         control={form.control}
                         name="password"
@@ -79,12 +107,14 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
                             <FormItem>
                                 <FormLabel>Password</FormLabel><br/>
                                 <FormControl>
-                                    <Input {...field} type="password" placeholder="Password" required className={styles.input} disabled={isLoading}/>
+                                    <Input {...field} type="password" placeholder="Password" required className={`${styles.input} ${form.formState.errors.password ? styles.inputError : ''}`} disabled={isLoading}/>
                                 </FormControl>
+                                <FormMessage/>
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" className={styles.button} disabled={isLoading}>
+
+                    <Button type="submit" className={styles.button} disabled={isLoading} style={{marginTop: "12px"}}>
                         {isLoading ? "Logging in..." : "Login"}
                     </Button>
                 </form>
