@@ -1,3 +1,4 @@
+// components/NavigationHeader.tsx
 import Link from "next/link";
 
 import styles from "@/styles/NavigationHeader.module.css";

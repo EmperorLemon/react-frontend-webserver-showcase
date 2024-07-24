@@ -1,11 +1,16 @@
+// pages/index.tsx
 import { NextPage } from "next";
 
-const Home: NextPage = () => {
+import Layout from "@/components/Layout";
+
+const HomePage: NextPage = () => {
     return (
-        <div>
-            <h1 style={{display: "flex", justifyContent: "center"}}>Welcome Home</h1>
-        </div>
+        <Layout>
+            <div>
+                <h1 style={{display: "flex", justifyContent: "center"}}>Welcome Home</h1>
+            </div>
+        </Layout>
     );
 };
 
-export default Home;
+export default HomePage;

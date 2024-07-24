@@ -1,3 +1,4 @@
+// components/Layout.tsx
 import NavigationHeader from  "@/components/NavigationHeader";
 import styles from "@/styles/Layout.module.css";
 

@@ -1,8 +1,10 @@
+// components/LoginForm.tsx
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import axios from "axios";
 
@@ -17,11 +19,11 @@ const formSchema = z.object({
     password: z.string().min(4, { message: "Password must be at least 8 characters." }),
 });
 
-type LoginFormProps = { onLoginSuccess: (token: string) => void };
-
-function LoginForm({ onLoginSuccess }: LoginFormProps) {
+function LoginForm() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
+    const router = useRouter();
 
     useEffect(() => {
         // Disable scrolling
@@ -41,7 +43,8 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
         },
     });
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) 
+    {
         setIsLoading(true);
         setError("");
 
@@ -52,7 +55,8 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
 
-            onLoginSuccess(accessToken);
+            console.log("Token: " + accessToken);
+            router.push("/dashboard");
         } catch (error: any) {
             console.error("Login error: ", error.response?.data || error.message);
             
@@ -78,7 +82,7 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className={styles.container}>
@@ -121,6 +125,6 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
             </Form>
         </div>
     );
-}
+};
 
 export default LoginForm;
