@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 
 const LoginPage: NextPage = () => {
     return (
-        <Layout>
+        <Layout title="Login" useHeader={true}>
             <div>
                 <h1 style={{display: "flex", justifyContent: "center"}}>Login</h1>
                 <LoginForm/>

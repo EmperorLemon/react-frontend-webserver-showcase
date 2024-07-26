@@ -1,9 +1,7 @@
 // components/LoginForm.tsx
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-
 import { useRouter } from "next/router";
-import Link from "next/link";
+import { useForm } from "react-hook-form";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,14 +13,16 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import styles from "@/styles/components/Form.module.css";
-import login_styles from "@/styles/components/LoginForm.module.css";
+import sign_up_styles from "@/styles/components/SignupForm.module.css";
 
 const formSchema = z.object({
+    first_name: z.string().min(3, { message: "First name must be at least 3 characters." }),
+    last_name: z.string().min(3, { message: "Last name must be at least 3 characters." }),
     username: z.string().min(4, { message: "Username must be at least 4 characters." }),
     password: z.string().min(4, { message: "Password must be at least 8 characters." }),
 });
 
-function LoginForm() {
+function SignupForm() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -41,6 +41,8 @@ function LoginForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            first_name: "",
+            last_name: "",
             username: "",
             password: "",
         },
@@ -52,14 +54,8 @@ function LoginForm() {
         setError("");
 
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/login/", values);
-            const { accessToken, refreshToken } = response.data;
-
-            localStorage.setItem("accessToken", accessToken);
-            localStorage.setItem("refreshToken", refreshToken);
-
-            console.log("Token: " + accessToken);
-            router.push("/dashboard");
+            const response = await axios.post("http://localhost:8000/api/auth/sign-up/", values);
+            router.push("/login");
         } catch (error: any) {
             console.error("Login error: ", error.response?.data || error.message);
             
@@ -92,6 +88,34 @@ function LoginForm() {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
                     {error && <p className={styles.error}>{error}</p>}
+                    
+                    <div className={styles.nameFieldsContainer}>
+                        <FormField
+                            control={form.control}
+                            name="first_name"
+                            render={({ field }) => (
+                                <FormItem className={styles.nameField}>
+                                    <FormControl>
+                                        <Input {...field} type="text" placeholder="First Name" required className={`${styles.input} ${form.formState.errors.first_name ? styles.inputError : ''}`} disabled={isLoading}/>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="last_name"
+                            render={({ field }) => (
+                                <FormItem className={styles.nameField}>
+                                    <FormControl>
+                                        <Input {...field} type="text" placeholder="Last Name" required className={`${styles.input} ${form.formState.errors.last_name ? styles.inputError : ''}`} disabled={isLoading}/>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
 
                     <FormField
                         control={form.control}
@@ -120,17 +144,12 @@ function LoginForm() {
                     />
 
                     <Button type="submit" className={styles.button} disabled={isLoading} style={{marginTop: "12px"}}>
-                        {isLoading ? "Logging in..." : "Login"}
+                        {isLoading ? "Signing up..." : "Sign Up"}
                     </Button>
-
-                    <div className={login_styles.signupContainer}>
-                        <p>Don't have an account?</p>
-                        <Link href="/sign-up" className={login_styles.signupLink}>Sign Up</Link>
-                    </div>
                 </form>
             </Form>
         </div>
     );
 };
 
-export default LoginForm;
+export default SignupForm;

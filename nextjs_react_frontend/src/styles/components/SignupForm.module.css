@@ -1,0 +1,20 @@
+/* styles/components/SignupForm.module.css */
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+  
+.loginLink {
+    color: #0070f3;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+  
+.loginLink:hover {
+    color: #0050a0;
+    text-decoration: underline;
+}

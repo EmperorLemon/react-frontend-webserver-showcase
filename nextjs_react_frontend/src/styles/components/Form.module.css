@@ -1,28 +1,29 @@
+/* styles/Form.module.css */
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 65vh;
-  }
+}
   
-  .form {
+.form {
     display: flex;
     flex-direction: column;
     width: 300px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-  }
+}
   
-  .input {
+.input {
     margin-bottom: 18px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
     width: 280px;
-  }
+}
   
-  .button {
+.button {
     padding: 10px;
     background-color: #007bff;
     color: white;
@@ -30,13 +31,13 @@
     border-radius: 3px;
     cursor: pointer;
     font-weight: bold;
-  }
+}
   
-  .button:hover {
+.button:hover {
     background-color: #0056b3;
-  }
+}
   
-  .error {
+.error {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,15 +50,29 @@
     padding: 3px;
     height: 60px;
     border-radius: 3px;
-  }
+}
   
-  .inputError {
+.inputError {
     border-color: red !important;
     background-color: white;
     outline: 1px solid red;
-  }
+}
 
-  .noScroll {
+.noScroll {
     overflow: hidden;
     height: 100%;
-  }
+}
+
+.nameFieldsContainer {
+    display: flex;
+    gap: 1rem; /* Adjust this value to control the space between fields */
+}
+
+.nameField {
+    flex: 1;
+}
+
+/* If you need to adjust the input width */
+.nameField .input {
+    width: 86%;
+}

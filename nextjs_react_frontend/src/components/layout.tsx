@@ -1,15 +1,16 @@
 // components/Layout.tsx
 import NavigationHeader from  "@/components/NavigationHeader";
-import styles from "@/styles/Layout.module.css";
+import styles from "@/styles/components/Layout.module.css";
 
 import Head from "next/head";
 
 interface LayoutProps {
     children: React.ReactNode;
     title?: string;
+    useHeader?: boolean;
 };
 
-function Layout({ children, title }: LayoutProps) {
+function Layout({ children, title, useHeader }: LayoutProps) {
     return (
         <div>
             <Head>
@@ -17,7 +18,7 @@ function Layout({ children, title }: LayoutProps) {
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <meta name="keywords" content="nextjs, react"/>
             </Head>
-            <header className={styles.header}><NavigationHeader/></header>
+            { useHeader && <header className={styles.header}><NavigationHeader/></header> }
             <main>{children}</main>
             <footer className={styles.footer}>© 2024 Caleb Goss</footer>
         </div>
