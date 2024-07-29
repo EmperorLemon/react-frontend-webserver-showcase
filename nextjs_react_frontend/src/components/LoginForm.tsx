@@ -18,7 +18,7 @@ import styles from "@/styles/components/Form.module.css";
 import login_styles from "@/styles/components/LoginForm.module.css";
 
 const formSchema = z.object({
-    username: z.string().min(4, { message: "Username must be at least 4 characters." }),
+    email: z.string().min(4, { message: "Email must be at least 4 characters." }),
     password: z.string().min(4, { message: "Password must be at least 8 characters." }),
 });
 
@@ -41,7 +41,7 @@ function LoginForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            email: "",
             password: "",
         },
     });
@@ -95,11 +95,11 @@ function LoginForm() {
 
                     <FormField
                         control={form.control}
-                        name="username"
+                        name="email"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input {...field} type="text" placeholder="Username" required className={`${styles.input} ${form.formState.errors.username ? styles.inputError : ''}`} disabled={isLoading}/>
+                                    <Input {...field} type="email" placeholder="Email" required className={`${styles.input} ${form.formState.errors.email ? styles.inputError : ''}`} disabled={isLoading}/>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
@@ -125,7 +125,7 @@ function LoginForm() {
 
                     <div className={login_styles.signupContainer}>
                         <p>Don't have an account?</p>
-                        <Link href="/sign-up" className={login_styles.signupLink}>Sign Up</Link>
+                        <Link href="/sign-up" className={login_styles.loginLink}>Sign Up</Link>
                     </div>
                 </form>
             </Form>

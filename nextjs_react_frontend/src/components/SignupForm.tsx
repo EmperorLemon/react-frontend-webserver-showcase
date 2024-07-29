@@ -1,7 +1,9 @@
 // components/LoginForm.tsx
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,7 +20,7 @@ import sign_up_styles from "@/styles/components/SignupForm.module.css";
 const formSchema = z.object({
     first_name: z.string().min(3, { message: "First name must be at least 3 characters." }),
     last_name: z.string().min(3, { message: "Last name must be at least 3 characters." }),
-    username: z.string().min(4, { message: "Username must be at least 4 characters." }),
+    email: z.string().min(4, { message: "Username must be at least 4 characters." }),
     password: z.string().min(4, { message: "Password must be at least 8 characters." }),
 });
 
@@ -43,7 +45,7 @@ function SignupForm() {
         defaultValues: {
             first_name: "",
             last_name: "",
-            username: "",
+            email: "",
             password: "",
         },
     });
@@ -119,11 +121,11 @@ function SignupForm() {
 
                     <FormField
                         control={form.control}
-                        name="username"
+                        name="email"
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input {...field} type="text" placeholder="Username" required className={`${styles.input} ${form.formState.errors.username ? styles.inputError : ''}`} disabled={isLoading}/>
+                                    <Input {...field} type="email" placeholder="Email" required className={`${styles.input} ${form.formState.errors.email ? styles.inputError : ''}`} disabled={isLoading}/>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
@@ -146,6 +148,11 @@ function SignupForm() {
                     <Button type="submit" className={styles.button} disabled={isLoading} style={{marginTop: "12px"}}>
                         {isLoading ? "Signing up..." : "Sign Up"}
                     </Button>
+
+                    <div className={sign_up_styles.loginContainer}>
+                        <p>Already have an account?</p>
+                        <Link href="/login" className={sign_up_styles.loginLink}>Login</Link>
+                    </div>
                 </form>
             </Form>
         </div>
